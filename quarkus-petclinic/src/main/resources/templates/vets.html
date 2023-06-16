@@ -15,7 +15,15 @@
         <tr>
             <td>{vet.firstName} {vet.lastName}</td>
             <!-- TODO: Add a for loop to list specialty -->
-            <td>none</td>
+            {#if vet.specialties.isEmpty}
+            <td><span>none</span></td>
+        {#else}
+            <td>
+                {#for specialty in vet.specialties}
+                    {specialty.name}
+                {/for}
+            </td>
+        {/if}
         </tr>
     {/for}
 
