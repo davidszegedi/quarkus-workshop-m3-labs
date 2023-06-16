@@ -9,12 +9,14 @@ import javax.ws.rs.core.MediaType;
 import io.quarkus.qute.Template;
 import io.quarkus.qute.TemplateInstance;
 
-// import org.acme.service.VetsService;
+import org.acme.service.VetsService;
 
 @Path("vets")
 public class VetsResource {
 
     // TODO: Inject CDI Bean
+    @Inject 
+    VetsService service; 
 
     @Inject
     Template vets;
@@ -25,6 +27,6 @@ public class VetsResource {
     @Produces(MediaType.TEXT_HTML)
     public TemplateInstance get() {
         return vets.data("active", "vets")
-                .data("vets", null); 
+                .data("vets", service.getAll()); 
     }
 }

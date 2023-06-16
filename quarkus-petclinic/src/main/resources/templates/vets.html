@@ -11,6 +11,13 @@
     </thead>
     <tbody>
         <!-- TODO: Add a for loop to list vets -->
+        {#for vet in vets}
+        <tr>
+            <td>{vet.firstName} {vet.lastName}</td>
+            <!-- TODO: Add a for loop to list specialty -->
+            <td>none</td>
+        </tr>
+    {/for}
 
     </tbody>
 </table>
