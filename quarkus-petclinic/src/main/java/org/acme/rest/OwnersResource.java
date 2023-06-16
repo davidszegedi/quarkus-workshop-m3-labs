@@ -17,9 +17,9 @@ import javax.ws.rs.core.Response.Status;
 import io.quarkus.qute.Template;
 import io.quarkus.qute.TemplateInstance;
 
-// import org.acme.model.Owner;
-// import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
-// import org.acme.model.OwnerForm;
+import org.acme.model.Owner;
+import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
+import org.acme.model.OwnerForm;
 
 import org.acme.service.OwnersService;
 
@@ -58,6 +58,20 @@ public class OwnersResource {
 
     }
 
+    // TODO: Add to Post transaction for adding a new owner
+    @POST
+    @Consumes(MediaType.MULTIPART_FORM_DATA) 
+    @Transactional 
+    @Path("addOwner")
+    public Response addOwner(@MultipartForm OwnerForm ownerForm) { 
+
+        Owner newOwner = ownerForm.addOwner();
+        newOwner.persist(); 
+        return Response.status(Status.MOVED_PERMANENTLY)
+                    .location(URI.create("/owners?id=" + newOwner.getId()))
+                    .build();
+    }
+
     // TODO: Add to retrieve an existing owner
     @GET
     @Produces(MediaType.TEXT_HTML)
@@ -67,5 +81,18 @@ public class OwnersResource {
         return editOwner.data("active", "owners")
                         .data("owner", ((ownerId == null) ? "new" : service.findById(ownerId)));
     }
+    
+    // TODO: Add to Post transaction for editing an existing owner
+    @POST
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Transactional
+    @Path("editOwner")
+    public Response editOwner(@MultipartForm OwnerForm ownerForm, @QueryParam("ownerId") Long ownerId) {
 
+        Owner existingOwner = service.findById(ownerId);
+        existingOwner = ownerForm.editOwner(existingOwner);
+        return Response.status(Status.MOVED_PERMANENTLY)
+                    .location(URI.create("/owners?id=" + ownerId))
+                    .build();
+    }
 }
