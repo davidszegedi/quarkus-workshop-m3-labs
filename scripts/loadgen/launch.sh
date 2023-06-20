@@ -1,7 +1,10 @@
 #!/bin/bash
 
 NAMESPACE="$1"
-ROUTE=$(oc get route -n ${NAMESPACE} -o jsonpath="{.items[].spec.host}{\"\n\"}")
+RATE="$2"
+ROUTE="https://"$(oc get route -n ${NAMESPACE} -o jsonpath="{.items[].spec.host}{\"\n\"}")
 
-#echo "This is namespace ${NAMESPACE} for app ${APP}"
+#echo "The namespace ${NAMESPACE} contains route ${ROUTE}"
+#echo $(curl -k ${ROUTE})
 
+sh load.sh ${RATE} ${ROUTE}
